@@ -13,7 +13,7 @@ namespace Target
 
         public void OpenDoor()
         {
-            doorTransf.rotation = Quaternion.Euler(0, 90, 0);
+            doorTransf.Rotate(new Vector3(0, 90f, 0));
         }
     }
 }

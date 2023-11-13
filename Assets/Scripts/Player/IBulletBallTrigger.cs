@@ -4,6 +4,7 @@ namespace Player
 {
     public interface IBulletBallTrigger
     {
-        UnityEvent HitEnemy { get; }
+        UnityEvent HitEnemyEvent { get; }
+        UnityEvent ArrivedToGarage { get; }
     }
 }

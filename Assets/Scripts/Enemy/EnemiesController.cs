@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Enemy
@@ -20,6 +22,14 @@ namespace Enemy
             foreach (var enemy in Enemies)
             {
                 enemy.Init();
+            }
+        }
+
+        public static bool IsEpidemicGoing
+        {
+            get
+            {
+                return Enemies.Any(c => c.IsSick);
             }
         }
     }

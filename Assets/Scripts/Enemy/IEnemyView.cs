@@ -4,6 +4,7 @@
     {
         IEnemyGetHit EnemyGetHit { get; }
         IEnemyInfection EnemyInfection { get; }
+        bool IsSick { get; }
         void Init();
     }
 }

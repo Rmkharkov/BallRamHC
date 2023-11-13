@@ -36,10 +36,5 @@ namespace Enemy
                 HitByPlayerEvent.Invoke();
             }  
         }
-
-        private void OnCollisionEnter(Collision other)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

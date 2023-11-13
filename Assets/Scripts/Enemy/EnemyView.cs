@@ -16,6 +16,9 @@ namespace Enemy
         
         private EnemyMaterialsConfig UsedEnemyMaterialsConfig => EnemyMaterialsConfig.Instance;
         private EnemyConfig UsedEnemyConfig => EnemyConfig.Instance;
+        private EEnemyState _currentState;
+
+        public bool IsSick => _currentState == EEnemyState.Infected;
 
         private void Start()
         {
@@ -38,11 +41,13 @@ namespace Enemy
         {
             SetState(EEnemyState.Infected);
             await Task.Delay(TimeSpan.FromSeconds(UsedEnemyConfig.InfectToDeathDelay));
+            SetState(EEnemyState.Dead);
             gameObject.SetActive(false);
         }
 
         private void SetState(EEnemyState state)
         {
+            _currentState = state;
             if (bodyRenderer != null)
             {
                 bodyRenderer.sharedMaterial = UsedEnemyMaterialsConfig.GetStateMaterial(state);

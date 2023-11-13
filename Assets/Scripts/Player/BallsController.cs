@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Enemy;
 using UI;
 using UI.GameplayInput;
 using UnityEngine;
@@ -23,6 +24,8 @@ namespace Player
         
         public UnityEvent LostSourceBall { get; } = new UnityEvent();
         
+        private bool _isOnMove;
+        
         private IGameplayInput GameplayInputInstance => GameplayInput.Instance;
         private PlayerConfig UsedPlayerConfig => PlayerConfig.Instance;
 
@@ -38,22 +41,36 @@ namespace Player
         {
             GameplayInputInstance.StartGrowth.AddListener(OnStartGrowth);
             GameplayInputInstance.EndGrowth.AddListener(OnEndGrowth);
-            UsedBulletBallTrigger.HitEnemy.AddListener(OnHitEnemy);
+            UsedBulletBallTrigger.HitEnemyEvent.AddListener(OnHitEnemy);
+            UsedBulletBallTrigger.ArrivedToGarage.AddListener(OnArrivedToGarage);
         }
 
         private async void OnStartGrowth()
         {
+            if (_isOnMove || EnemiesController.IsEpidemicGoing)
+            {
+                return;
+            }
             _ctsGrowth = new CancellationTokenSource();
             await AsyncGrowthTask(_ctsGrowth.Token);
         }
 
         private void OnEndGrowth()
         {
+            if (_isOnMove || EnemiesController.IsEpidemicGoing)
+            {
+                return;
+            }
             _ctsGrowth.Cancel();
             StartMoving();
         }
 
         private void OnHitEnemy()
+        {
+            _ctsMoving.Cancel();
+        }
+
+        private void OnArrivedToGarage()
         {
             _ctsMoving.Cancel();
         }
@@ -85,8 +102,10 @@ namespace Player
         private async void StartMoving()
         {
             _ctsMoving = new CancellationTokenSource();
+            _isOnMove = true;
             await UsedBulletBallMoving.AsyncMovingTask(UsedPlayerConfig.MoveSpeed, UsedPlayerConfig.MovingTimeStamp,
                 _ctsMoving.Token);
+            _isOnMove = false;
         }
     }
 }

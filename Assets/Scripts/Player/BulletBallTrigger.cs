@@ -8,15 +8,20 @@ namespace Player
 {
     public class BulletBallTrigger : MonoBehaviour, IBulletBallTrigger
     {
-        public UnityEvent HitEnemy { get; } = new UnityEvent();
+        public UnityEvent HitEnemyEvent { get; } = new UnityEvent();
+        public UnityEvent ArrivedToGarage { get; } = new UnityEvent();
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag(Tags.Enemy))
             {
-                HitEnemy.Invoke();
+                HitEnemyEvent.Invoke();
                 var enemyTrigger = other.GetComponent<IEnemyInfection>();
-                enemyTrigger?.InfectMe();
+                // enemyTrigger?.InfectMe();
+            }
+            else if (other.CompareTag(Tags.BallStopTrigger))
+            {
+                ArrivedToGarage.Invoke();
             }
         }
     }
