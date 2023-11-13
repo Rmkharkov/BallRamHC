@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c059c2bea76486797ac140628502270, type: 3}
+  m_Name: EnemyMaterialsConfig
+  m_EditorClassIdentifier: 
+  materials:
+  - enemyState: 0
+    material: {fileID: 2100000, guid: af1e52ec66fdc1642b6fe7a4cb509ebd, type: 2}
+  - enemyState: 1
+    material: {fileID: 2100000, guid: af1e52ec66fdc1642b6fe7a4cb509ebd, type: 2}
+  - enemyState: 2
+    material: {fileID: 2100000, guid: c69fcef1d3a053945bbccbb605cc8a03, type: 2}
+  - enemyState: 3
+    material: {fileID: 2100000, guid: c69fcef1d3a053945bbccbb605cc8a03, type: 2}

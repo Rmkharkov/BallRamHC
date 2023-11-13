@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adfbdf3e0b0d43acb1233e1803fd044e, type: 3}
+  m_Name: TextsConfig
+  m_EditorClassIdentifier: 
+  texts:
+  - textId: 0
+    textValue: 
+  - textId: 1
+    textValue: YOU LOST!
+  - textId: 2
+    textValue: YOU WON!
+  - textId: 3
+    textValue: Better luck next time!
+  - textId: 4
+    textValue: You are awesome!
