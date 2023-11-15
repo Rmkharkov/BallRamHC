@@ -6,7 +6,5 @@ namespace Enemy
     {
         UnityEvent InfectedEvent { get; }
         void Init(IEnemyView enemyView);
-        void TransferInfection();
-        void InfectMe();
     }
 }

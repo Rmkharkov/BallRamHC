@@ -1,14 +1,21 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Target
 {
     public class TargetDoorView : MonoBehaviour, ITargetDoorView
     {
         [SerializeField] private Transform doorTransf;
-        
+        private Quaternion _startRotation;
+
+        private void Start()
+        {
+            _startRotation = doorTransf.rotation;
+        }
+
         public void CloseDoor()
         {
-            doorTransf.rotation = Quaternion.Euler(0, 0, 0);
+            doorTransf.rotation = _startRotation;
         }
 
         public void OpenDoor()

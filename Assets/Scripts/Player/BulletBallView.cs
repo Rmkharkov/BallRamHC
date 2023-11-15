@@ -24,6 +24,7 @@ namespace Player
 
         public void ResetSize()
         {
+            transformToScale.rotation = Quaternion.identity;
             transformToScale.localScale = new Vector3(_startScale, _startScale,_startScale);
         }
     }

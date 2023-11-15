@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Enemy.Spawn;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace Enemy
     public class EnemiesController
     {
         private static readonly List<IEnemyView> Enemies = new List<IEnemyView>();
+        private static IEnemiesSpawn UsedEnemiesSpawn => EnemiesSpawn.Instance;
         
         public static void AddEnemyView(IEnemyView enemy)
         {
@@ -22,14 +24,6 @@ namespace Enemy
             foreach (var enemy in Enemies)
             {
                 enemy.Init();
-            }
-        }
-
-        public static bool IsEpidemicGoing
-        {
-            get
-            {
-                return Enemies.Any(c => c.IsSick);
             }
         }
     }

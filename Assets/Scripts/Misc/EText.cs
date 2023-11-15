@@ -3,9 +3,9 @@
     public enum EText
     {
         None,
-        ResultTitleLost,
+        ResultTitleLose,
         ResultTitleWon,
-        ResultDescriptionLost,
+        ResultDescriptionLose,
         ResultDescriptionWon,
     }
 }

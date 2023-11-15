@@ -7,37 +7,22 @@ namespace Enemy
 {
     public class EnemyInfection : MonoBehaviour, IEnemyInfection
     {
-        [SerializeField] private Collider infectionCollider;
-        
         private IEnemyView _enemyView;
         
         public UnityEvent InfectedEvent { get; } = new UnityEvent();
 
         public async void Init(IEnemyView enemyView)
         {
-            // InfectedEvent.RemoveAllListeners();
+            InfectedEvent.RemoveAllListeners();
             
             _enemyView = enemyView;
-            if (infectionCollider != null)
-            {
-                infectionCollider.enabled = false;
-            }
 
             await Task.Yield();
             
-            _enemyView.EnemyGetHit.HitByPlayerEvent.AddListener(InfectMe);
-            _enemyView.EnemyGetHit.HitByAnotherEnemyEvent.AddListener(InfectMe);
+            _enemyView.EnemyGetHit.HitByPlayerEvent.AddListener(InfectedByPlayer);
         }
 
-        public void TransferInfection()
-        {
-            if (infectionCollider != null)
-            {
-                infectionCollider.enabled = true;
-            }
-        }
-
-        public void InfectMe()
+        private void InfectedByPlayer()
         {
             InfectedEvent.Invoke();
         }

@@ -5,6 +5,8 @@ namespace Player
 {
     public interface IBulletBallMoving
     {
-        Task AsyncMovingTask(float speed, float moveTimeStamp, CancellationToken token);
+        void Shoot(float forceFactor);
+        void Stop();
+        void ResetPosition();
     }
 }

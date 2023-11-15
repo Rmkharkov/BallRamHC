@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Enemy;
+using Game;
+using Target;
 using UI;
 using UI.GameplayInput;
 using UnityEngine;
@@ -17,20 +19,26 @@ namespace Player
         [SerializeField] private BulletBallView bulletBallView;
         [SerializeField] private BulletBallTrigger bulletBallTrigger;
         [SerializeField] private BulletBallMoving bulletBallMoving;
+        [SerializeField] private RoadPathView roadPathView;
         private IBallSourceView UsedBallSourceView => ballSourceView;
         private IBulletBallView UsedBulletBallView => bulletBallView;
         private IBulletBallTrigger UsedBulletBallTrigger => bulletBallTrigger;
         private IBulletBallMoving UsedBulletBallMoving => bulletBallMoving;
+
+        private IRoadPathView UsedRoadPathView => roadPathView;
         
         public UnityEvent LostSourceBall { get; } = new UnityEvent();
+        public UnityEvent BallArrivedToGarage { get; } = new UnityEvent();
         
         private bool _isOnMove;
+        private bool _arrivedToTarget;
         
         private IGameplayInput GameplayInputInstance => GameplayInput.Instance;
+        private IMatchRegulator UsedMatchRegulator => MatchRegulator.Instance;
+        private ITargetController UsedTargetController => TargetController.Instance;
         private PlayerConfig UsedPlayerConfig => PlayerConfig.Instance;
 
         private CancellationTokenSource _ctsGrowth;
-        private CancellationTokenSource _ctsMoving;
 
         private void Awake()
         {
@@ -42,12 +50,26 @@ namespace Player
             GameplayInputInstance.StartGrowth.AddListener(OnStartGrowth);
             GameplayInputInstance.EndGrowth.AddListener(OnEndGrowth);
             UsedBulletBallTrigger.HitEnemyEvent.AddListener(OnHitEnemy);
+            UsedMatchRegulator.ResetMatch.AddListener(Reset);
+            UsedTargetController.TargetTrigger.BallArrived.AddListener(OnArrivedToGarageEntrance);
             UsedBulletBallTrigger.ArrivedToGarage.AddListener(OnArrivedToGarage);
+        }
+
+        private void Reset()
+        {
+            UsedBulletBallMoving.Stop();
+            UsedBallSourceView.ResetSize();
+            UsedBulletBallView.ResetSize();
+            UsedRoadPathView.ResetSize();
+            UsedBulletBallTrigger.ResetSize();
+            UsedBulletBallMoving.ResetPosition();
+            _isOnMove = false;
+            _arrivedToTarget = false;
         }
 
         private async void OnStartGrowth()
         {
-            if (_isOnMove || EnemiesController.IsEpidemicGoing)
+            if (_isOnMove || _arrivedToTarget)
             {
                 return;
             }
@@ -57,7 +79,7 @@ namespace Player
 
         private void OnEndGrowth()
         {
-            if (_isOnMove || EnemiesController.IsEpidemicGoing)
+            if (_isOnMove || _arrivedToTarget || _ctsGrowth.IsCancellationRequested)
             {
                 return;
             }
@@ -65,14 +87,26 @@ namespace Player
             StartMoving();
         }
 
-        private void OnHitEnemy()
+        private async void OnHitEnemy()
         {
-            _ctsMoving.Cancel();
+            UsedBulletBallMoving.Stop();
+            await Task.Delay(TimeSpan.FromSeconds(UsedPlayerConfig.AfterEnemyHitDelay));
+            UsedBulletBallView.ResetSize();
+            UsedBulletBallTrigger.ResetSize();
+            UsedBulletBallMoving.ResetPosition();
+            
+            _isOnMove = false;
         }
 
         private void OnArrivedToGarage()
         {
-            _ctsMoving.Cancel();
+            UsedBulletBallMoving.Stop();
+            BallArrivedToGarage.Invoke();
+        }
+
+        private void OnArrivedToGarageEntrance()
+        {
+            _arrivedToTarget = true;
         }
 
         private async Task AsyncGrowthTask(CancellationToken token)
@@ -83,12 +117,14 @@ namespace Player
                 {
                     if (UsedBallSourceView.Decrease(UsedPlayerConfig.DecreaseSourceSpeed, UsedPlayerConfig.MinimumSourceScale))
                     {
+                        UsedRoadPathView.DecreaseWidth(UsedPlayerConfig.DecreaseSourceSpeed);
                         UsedBulletBallView.Growth(UsedPlayerConfig.GrowBulletSpeed);
+                        UsedBulletBallTrigger.Growth(UsedPlayerConfig.GrowBulletSpeed * UsedPlayerConfig.GrowBulletColliderFactor);
                     }
                     else
                     {
+                        _ctsGrowth.Cancel();
                         LostSourceBall.Invoke();
-                        OnEndGrowth();
                         break;
                     }
                     await Task.Delay(TimeSpan.FromSeconds(UsedPlayerConfig.ScaleTimeStamp), token);
@@ -99,13 +135,10 @@ namespace Player
             }
         }
 
-        private async void StartMoving()
+        private void StartMoving()
         {
-            _ctsMoving = new CancellationTokenSource();
             _isOnMove = true;
-            await UsedBulletBallMoving.AsyncMovingTask(UsedPlayerConfig.MoveSpeed, UsedPlayerConfig.MovingTimeStamp,
-                _ctsMoving.Token);
-            _isOnMove = false;
+            UsedBulletBallMoving.Shoot(UsedPlayerConfig.MoveSpeed);
         }
     }
 }

@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ad27fe2a34f436e9aefc71bc7132370, type: 3}
   m_Name: PlayerConfig
   m_EditorClassIdentifier: 
-  minimumSourceScale: 0.1
+  minimumSourceScale: 0.3
   decreaseSourceSpeed: 0.002
   growBulletSpeed: 0.005
   scaleTimeStamp: 0.033
-  moveSpeed: 1
-  movingTimeStamp: 0.033
+  growBulletColliderFactor: 3
+  moveSpeed: 5
+  afterEnemyHitDelay: 0.02

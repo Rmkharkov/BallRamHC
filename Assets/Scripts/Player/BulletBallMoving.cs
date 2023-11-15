@@ -8,21 +8,29 @@ namespace Player
     public class BulletBallMoving : MonoBehaviour, IBulletBallMoving
     {
         [SerializeField] private Transform targetTransf;
+        [SerializeField] private Rigidbody usedRigidbody;
+        private Vector3 _startPosition;
         private CancellationToken _token;
-        
-        public async Task AsyncMovingTask(float speed, float moveTimeStamp, CancellationToken token)
+
+        private void Start()
         {
-            try
-            {
-                while (!token.IsCancellationRequested)
-                {
-                    transform.position = Vector3.MoveTowards(transform.position, targetTransf.position, speed * moveTimeStamp);
-                    await Task.Delay(TimeSpan.FromSeconds(moveTimeStamp), token);
-                }
-            }
-            catch (OperationCanceledException)
-            {
-            }
+            _startPosition = transform.position;
+        }
+
+        public void Shoot(float forceFactor)
+        {
+            usedRigidbody.AddForce(-targetTransf.position * forceFactor);
+        }
+
+        public void Stop()
+        {
+            usedRigidbody.velocity = Vector3.zero;
+            usedRigidbody.angularVelocity = Vector3.zero;
+        }
+
+        public void ResetPosition()
+        {
+            transform.position = _startPosition;
         }
     }
 }

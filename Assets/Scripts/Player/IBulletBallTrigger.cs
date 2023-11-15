@@ -6,5 +6,7 @@ namespace Player
     {
         UnityEvent HitEnemyEvent { get; }
         UnityEvent ArrivedToGarage { get; }
+        void Growth(float percent);
+        void ResetSize();
     }
 }

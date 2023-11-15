@@ -16,7 +16,7 @@ MonoBehaviour:
   - textId: 0
     textValue: 
   - textId: 1
-    textValue: YOU LOST!
+    textValue: YOU LOSE!
   - textId: 2
     textValue: YOU WON!
   - textId: 3

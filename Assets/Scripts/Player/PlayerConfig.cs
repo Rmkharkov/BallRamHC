@@ -25,15 +25,17 @@ namespace Player
         [SerializeField] private float decreaseSourceSpeed;
         [SerializeField] private float growBulletSpeed;
         [SerializeField] private float scaleTimeStamp;
+        [SerializeField] private float growBulletColliderFactor;
         [Header("Moving")]
         [SerializeField] private float moveSpeed;
-        [SerializeField] private float movingTimeStamp;
+        [SerializeField] private float afterEnemyHitDelay;
         public float MinimumSourceScale => minimumSourceScale;
         public float DecreaseSourceSpeed => decreaseSourceSpeed;
         public float GrowBulletSpeed => growBulletSpeed;
         public float ScaleTimeStamp => scaleTimeStamp;
         public float MoveSpeed => moveSpeed;
-        public float MovingTimeStamp => movingTimeStamp;
+        public float GrowBulletColliderFactor => growBulletColliderFactor;
+        public float AfterEnemyHitDelay => afterEnemyHitDelay;
 
     }
 }

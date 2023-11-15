@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   infectTransferDelay: 0
   infectToDeathDelay: 0.5
+  infectionColliderMaxSize: 0.4
+  infectionGrowthTime: 2
+  enemyPrefab: {fileID: 7029671090592912747, guid: 1178562c7720f68448ba845fc5872112, type: 3}
+  deathParticlePrefab: {fileID: 5116641498291015983, guid: df24203cb47e5eb4c9d7127073387ccb, type: 3}

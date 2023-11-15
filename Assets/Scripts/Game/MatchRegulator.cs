@@ -28,13 +28,21 @@ namespace Game
         {
             ResultWindow.RestartPressed.AddListener(RestartMatch);
             UsedBallsController.LostSourceBall.AddListener(SetLoseMatch);
+            UsedBallsController.BallArrivedToGarage.AddListener(SetWonMatch);
+            await Task.Yield();
+            RestartMatch();
+        }
+
+        private async void RestartMatch()
+        {
+            ResetMatch.Invoke();
             await Task.Yield();
             EnemiesController.ResetEnemies();
         }
 
-        private void RestartMatch()
+        private void SetWonMatch()
         {
-            ResetMatch.Invoke();
+            WonMatch.Invoke();
         }
 
         private void SetLoseMatch()

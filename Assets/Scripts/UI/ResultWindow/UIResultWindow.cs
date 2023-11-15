@@ -34,8 +34,8 @@ namespace UI.ResultWindow
 
         void OnLost()
         {
-            titleText.text = Texts.GetText(EText.ResultTitleLost);
-            descriptionText.text = Texts.GetText(EText.ResultDescriptionLost);
+            titleText.text = Texts.GetText(EText.ResultTitleLose);
+            descriptionText.text = Texts.GetText(EText.ResultDescriptionLose);
             resultWindowObject.SetActive(true);
         }
 

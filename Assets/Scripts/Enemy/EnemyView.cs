@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Enemy.Spawn;
+using Game;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -15,6 +17,9 @@ namespace Enemy
         public IEnemyInfection EnemyInfection => enemyInfection;
         
         private EnemyMaterialsConfig UsedEnemyMaterialsConfig => EnemyMaterialsConfig.Instance;
+        private IEnemiesSpawn UsedEnemiesSpawn => EnemiesSpawn.Instance;
+        private IMatchRegulator UsedMatchRegulator => MatchRegulator.Instance;
+        private IParticleSpawn UsedParticleSpawn => ParticleSpawn.Instance;
         private EnemyConfig UsedEnemyConfig => EnemyConfig.Instance;
         private EEnemyState _currentState;
 
@@ -23,6 +28,8 @@ namespace Enemy
         private void Start()
         {
             EnemiesController.AddEnemyView(this);
+            UsedMatchRegulator.LostMatch.AddListener(HideMe);
+            UsedMatchRegulator.WonMatch.AddListener(HideMe);
         }
 
         public async void Init()
@@ -42,7 +49,8 @@ namespace Enemy
             SetState(EEnemyState.Infected);
             await Task.Delay(TimeSpan.FromSeconds(UsedEnemyConfig.InfectToDeathDelay));
             SetState(EEnemyState.Dead);
-            gameObject.SetActive(false);
+            UsedParticleSpawn.SpawnParticle(transform.localPosition);
+            UsedEnemiesSpawn.HideEnemy(this);
         }
 
         private void SetState(EEnemyState state)
@@ -52,6 +60,11 @@ namespace Enemy
             {
                 bodyRenderer.sharedMaterial = UsedEnemyMaterialsConfig.GetStateMaterial(state);
             }
+        }
+
+        private void HideMe()
+        {
+            UsedEnemiesSpawn.HideEnemy(this);
         }
     }
 }
